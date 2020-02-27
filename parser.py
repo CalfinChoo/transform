@@ -33,7 +33,60 @@ The file follows the following format:
 See the file script for an example of the file format
 """
 def parse_file( fname, points, transform, screen, color ):
-    pass
     file = open(fname, "r")
     commands = file.readlines()
+    for c in range(len(commands)):
+        commands[c] = commands[c].rstrip()
+    print (commands)
+    x = 0
+    while (x < len(commands)):
+        if (commands[x] == "line"):
+            x += 1
+            args = commands[x].split(" ")
+            begin = []
+            end = []
+            for i in range(len(args)):
+                if (i < len(args) / 2):
+                    begin.append(int(args[i]))
+                else end.append(int(args[i]))
+            points.append(begin)
+            points.append(end)
+        elif (commands[x] == "ident"):
+            ident(transform)
+        elif (commands[x] == "scale"):
+            x += 1
+            args = commands[x].split(" ")
+            s = make_scale(int(args[0]), int(args[1]), int(args[2]))
+            matrix_mult(s, transform)
+        elif (commands[x] == "translate"):
+            x += 1
+            args = commands[x].split(" ")
+            t = make_translate(int(args[0]), int(args[1]), int(args[2]))
+            matrix_mult(t, transform)
+        elif (commands[x] == "rotate"):
+            x += 1
+            args = commands[x].split(" ")
+            if (args[0] == "x"):
+                r = make_rotX(float(args[1]))
+                matrix_mult(r, transform)
+            elif (args[0] == "y"):
+                r = make_rotY(float(args[1]))
+                matrix_mult(r, transform)
+            else:
+                r = make_rotZ(float(args[1]))
+                matrix_mult(r, transform)
+        elif (commands[x] == "apply"):
+            matrix_mult(transform, points)
+        elif (commands[x] == "display"):
+            screen = new_screen()
+            draw_lines(points, screen, color)
+            display(screen)
+        elif (commands[x] == "save"):
+            x += 1
+            screen = new_screen()
+            draw_lines(points, screen, color)
+
+        elif (commands[x] == "quit"):
+            return
+        x += 1
     file.close()
