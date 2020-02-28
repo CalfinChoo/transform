@@ -37,7 +37,6 @@ def parse_file( fname, points, transform, screen, color ):
     commands = file.readlines()
     for c in range(len(commands)):
         commands[c] = commands[c].rstrip()
-    print (commands)
     x = 0
     while (x < len(commands)):
         if (commands[x] == "line"):
@@ -48,7 +47,9 @@ def parse_file( fname, points, transform, screen, color ):
             for i in range(len(args)):
                 if (i < len(args) / 2):
                     begin.append(int(args[i]))
-                else end.append(int(args[i]))
+                else: end.append(int(args[i]))
+            begin.append(1)
+            end.append(1)
             points.append(begin)
             points.append(end)
         elif (commands[x] == "ident"):
@@ -58,7 +59,7 @@ def parse_file( fname, points, transform, screen, color ):
             args = commands[x].split(" ")
             s = make_scale(int(args[0]), int(args[1]), int(args[2]))
             matrix_mult(s, transform)
-        elif (commands[x] == "translate"):
+        elif (commands[x] == "move"):
             x += 1
             args = commands[x].split(" ")
             t = make_translate(int(args[0]), int(args[1]), int(args[2]))
@@ -67,16 +68,19 @@ def parse_file( fname, points, transform, screen, color ):
             x += 1
             args = commands[x].split(" ")
             if (args[0] == "x"):
-                r = make_rotX(float(args[1]))
+                r = make_rotX(int(args[1]))
                 matrix_mult(r, transform)
             elif (args[0] == "y"):
-                r = make_rotY(float(args[1]))
+                r = make_rotY(int(args[1]))
                 matrix_mult(r, transform)
             else:
-                r = make_rotZ(float(args[1]))
+                r = make_rotZ(int(args[1]))
                 matrix_mult(r, transform)
         elif (commands[x] == "apply"):
             matrix_mult(transform, points)
+            for cols in range(len(points)):
+                for rows in range(len(points[cols])):
+                        points[cols][rows] = int(points[cols][rows])
         elif (commands[x] == "display"):
             screen = new_screen()
             draw_lines(points, screen, color)
@@ -85,7 +89,7 @@ def parse_file( fname, points, transform, screen, color ):
             x += 1
             screen = new_screen()
             draw_lines(points, screen, color)
-
+            save_ppm(screen, commands[x])
         elif (commands[x] == "quit"):
             return
         x += 1

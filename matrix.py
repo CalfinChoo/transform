@@ -10,7 +10,8 @@ z0  z1  ... zn
 import math
 
 def make_translate( x, y, z ):
-    m = ident(new_matrix())
+    m = new_matrix()
+    ident(m)
     m[3][0] = x
     m[3][1] = y
     m[3][2] = z
@@ -25,7 +26,7 @@ def make_scale( x, y, z ):
     return m
 
 def make_rotX( theta ):
-    theta = theta * 2 * math.PI / 360
+    theta = theta * 2 * math.pi / 360
     m = new_matrix()
     m[0][0] = 1
     m[1][1] = math.cos(theta)
@@ -36,24 +37,24 @@ def make_rotX( theta ):
     return m
 
 def make_rotY( theta ):
-    theta = theta * 2 * math.PI / 360
-    m = new_matrix()
-    m[0][0] = math.cos(theta)
-    m[1][0] = -1 * math.sin(theta)
-    m[0][1] = math.sin(theta)
-    m[1][1] = math.cos(theta)
-    m[2][2] = 1
-    m[3][3] = 1
-    return m
-
-def make_rotZ( theta ):
-    theta = theta * 2 * math.PI / 360
+    theta = theta * 2 * math.pi / 360
     m = new_matrix()
     m[0][0] = math.cos(theta)
     m[2][0] = math.sin(theta)
     m[1][1] = 1
     m[0][2] = -1 * math.sin(theta)
     m[2][2] = math.cos(theta)
+    m[3][3] = 1
+    return m
+
+def make_rotZ( theta ):
+    theta = theta * 2 * math.pi / 360
+    m = new_matrix()
+    m[0][0] = math.cos(theta)
+    m[1][0] = -1 * math.sin(theta)
+    m[0][1] = math.sin(theta)
+    m[1][1] = math.cos(theta)
+    m[2][2] = 1
     m[3][3] = 1
     return m
 
