@@ -89,7 +89,9 @@ def parse_file( fname, points, transform, screen, color ):
             x += 1
             screen = new_screen()
             draw_lines(points, screen, color)
-            save_ppm(screen, commands[x])
+            save_ppm(screen, "binary.ppm")
+            save_ppm_ascii(screen, 'ascii.ppm')
+            save_extension(screen, commands[x] + ".png")
         elif (commands[x] == "quit"):
             return
         x += 1
